@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Saint Rita's High School</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f4f7f6; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        
+        .main-card { 
+            display: flex; 
+            background: white; 
+            width: 850px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        
+        .left-side { 
+            background: #2c4a6b; 
+            color: white; 
+            padding: 50px; 
+            width: 40%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+        
+        .left-side h2 { font-size: 28px; margin-bottom: 20px; line-height: 1.2; }
+        .left-side p { line-height: 1.6; opacity: 0.9; margin-bottom: 15px; }
+
+        .right-side { padding: 50px; width: 60%; display: flex; flex-direction: column; justify-content: center; }
+        .right-side h3 { color: #2c4a6b; margin-bottom: 20px; text-align: center;}
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+        }
+        
+        .pass-container { 
+            display: flex; 
+            align-items: center; 
+            font-size: 14px; 
+            margin: 0px 0 10px 0; 
+            color: #333;
+        }
+        .pass-container input[type="checkbox"] { 
+            width: auto; 
+            margin: 0 10px 0 0; 
+        }
+
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #2c4a6b; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin-top: 15px; 
+            transition: background 0.3s;
+        }
+        
+        button:hover { background: #1e354d; }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <div class="left-side">
+        <h2>Welcome Back to Saint Rita's High School</h2>
+        <p>Please log in to continue your academic journey.</p>
+    </div>
+
+    <div class="right-side">
+        <h3>Account Login</h3>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            
+            <div class="pass-container">
+                <input type="checkbox" id="showPass" onclick="togglePassword()">
+                <label for="showPass">Show Password</label>
+            </div>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const pass = document.getElementById('password');
+        pass.type = (pass.type === 'password') ? 'text' : 'password';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const data = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
+
+        try {
+            // পোর্টের ভুল সংশোধন করা হয়েছে এখানে (http://localhost:5000 ব্যবহার করো)
+            const response = await fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(result.message);
+                // যদি সার্ভার থেকে রিডাইরেক্ট ইউআরএল আসে তবে সেখানে যাবে
+                window.location.href = result.redirectUrl || 'dashboard.html'; 
+            } else {
+                alert(result.message);
+            }
+        } catch (err) {
+            console.error("Fetch Error:", err);
+            alert("Connection error! Make sure the server (port 5000) is running.");
+        }
+    });
+</script>
+
+</body>
+</html>

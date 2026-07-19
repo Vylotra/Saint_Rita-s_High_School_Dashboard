@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .box { padding: 30px; background: #2b4c6f; color: white; border-radius: 15px; }
+    </style>
+</head>
+<body>
+    <h2>Admin Overview</h2>
+    <div class="stats-grid">
+        <div class="box">Total Students: <span id="sCount">0</span></div>
+        <div class="box">Total Teachers: <span id="tCount">0</span></div>
+    </div>
+    <script>
+        fetch('/api/stats').then(res => res.json()).then(data => {
+            document.getElementById('sCount').innerText = data.sCount;
+            document.getElementById('tCount').innerText = data.tCount;
+        });
+    </script>
+</body>
+</html>

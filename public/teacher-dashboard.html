@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; padding: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h2>Student Attendance/List</h2>
+    <select id="classSelect" onchange="loadStudents()">
+        <option value="5">Class 5</option>
+        <option value="9">Class 9</option>
+    </select>
+    <table>
+        <thead><tr><th>Roll</th><th>Name</th></tr></thead>
+        <tbody id="studentList"></tbody>
+    </table>
+
+    <script>
+        async function loadStudents() {
+            const cls = document.getElementById('classSelect').value;
+            const res = await fetch(`/api/students/${cls}`);
+            const data = await res.json();
+            document.getElementById('studentList').innerHTML = data.map(s => 
+                `<tr><td>${s.roll}</td><td>${s.name}</td></tr>`).join('');
+        }
+        loadStudents(); // ডিফল্ট লোড
+    </script>
+</body>
+</html>

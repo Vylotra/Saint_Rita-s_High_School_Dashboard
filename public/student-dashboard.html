@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard | Saint Rita's</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; display: flex; }
+        .sidebar { width: 260px; background: #2c4a6b; color: white; height: 100vh; padding: 30px 20px; position: fixed; }
+        .sidebar h2 { font-size: 22px; margin-bottom: 40px; border-bottom: 1px solid #3e5a7a; padding-bottom: 10px; }
+        .sidebar a { display: block; color: #cbd5e0; text-decoration: none; padding: 12px 15px; margin-bottom: 8px; border-radius: 8px; transition: 0.3s; }
+        .sidebar a:hover { background: #1e354d; color: white; }
+        .main-content { margin-left: 300px; padding: 40px; width: 100%; }
+        .profile-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 600px; border-left: 8px solid #2c4a6b; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .info-label { font-weight: 600; color: #555; }
+        .info-value { color: #2c4a6b; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Student Portal</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Profile</a>
+    <a href="#">Attendance</a>
+    <a href="login.html" style="margin-top: 100px; color: #ff9999;">Logout</a>
+</div>
+
+<div class="main-content">
+    <div class="profile-card" id="studentDetails">
+        <h3>Loading Profile...</h3>
+    </div>
+</div>
+
+<script>
+    async function loadDashboard() {
+        try {
+            const response = await fetch('/student-data');
+            const data = await response.json();
+            
+            if (response.ok) {
+                document.getElementById('studentDetails').innerHTML = `
+                    <h3>Welcome, ${data.name}!</h3>
+                    <div class="info-row"><span class="info-label">Name:</span> <span class="info-value">${data.name}</span></div>
+                    <div class="info-row"><span class="info-label">Class:</span> <span class="info-value">${data.class}</span></div>
+                    <div class="info-row"><span class="info-label">Group:</span> <span class="info-value">${data.group}</span></div>
+                    <div class="info-row"><span class="info-label">Roll:</span> <span class="info-value">${data.roll}</span></div>
+                    <div class="info-row"><span class="info-label">Mentor:</span> <span class="info-value">${data.teacherName}</span></div>
+                `;
+            } else {
+                document.getElementById('studentDetails').innerHTML = "<h3>Could not load data.</h3>";
+            }
+        } catch (err) {
+            console.error("Error:", err);
+        }
+    }
+    loadDashboard();
+</script>
+</body>
+</html>
